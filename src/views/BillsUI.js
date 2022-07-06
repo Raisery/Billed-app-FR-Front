@@ -19,9 +19,24 @@ const row = (bill) => {
     `)
 }
 
+/* const rows = (data) => {
+  if (data && data.length) {
+    data.sort((a, b) => ((a.date < b.date) ? 1 : -1))
+    return data.map(bill => row(bill)).join("")
+  }
+  return ""
+} */
+
 const rows = (data) => {
-  data.sort((a,b) => ((a.date<b.date) ? 1 : -1))
-  return (data && data.length) ? data.map(bill => row(bill)).join("") : ""
+  if(data && data.length){
+  data.sort((a, b) =>{
+    const dateA =Date.parse(a.date)
+    const dateB =Date.parse(b.date)
+  
+    return dateA === dateB ? 0 : dateA < dateB ? 1 : -1 ;
+  })
+}
+  return data && data.length ? data.map((bill) => row(bill)).join("") : ""
 }
 
 
