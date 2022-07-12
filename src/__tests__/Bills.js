@@ -3,7 +3,9 @@
  */
 
 import {screen, waitFor} from "@testing-library/dom"
+import userEvent from '@testing-library/user-event'
 import BillsUI from "../views/BillsUI.js"
+import Bills from "../containers/Bills.js"
 import { bills } from "../fixtures/bills.js"
 import { ROUTES_PATH} from "../constants/routes.js";
 import {localStorageMock} from "../__mocks__/localStorage.js";
@@ -26,7 +28,7 @@ describe("Given I am connected as an employee", () => {
       await waitFor(() => screen.getByTestId('icon-window'))
       const windowIcon = screen.getByTestId('icon-window')
       //to-do write expect expression
-
+      expect(windowIcon).toHaveClass('active-icon')
     })
     test("Then bills should be ordered from earliest to latest", () => {
       document.body.innerHTML = BillsUI({ data: bills })
@@ -34,6 +36,20 @@ describe("Given I am connected as an employee", () => {
       const antiChrono = (a, b) => ((a < b) ? 1 : -1)
       const datesSorted = [...dates].sort(antiChrono)
       expect(dates).toEqual(datesSorted)
+    })
+
+    test("Then click on eye icon should shows the modal", async () => {
+      document.body.innerHTML = BillsUI({data: bills})
+      await waitFor(() => screen.getByTestId('icon-eye1'))
+      const iconEye = screen.getByTestId('icon-eye1')
+      userEvent.click(iconEye)
+      await waitFor(() => screen.getByText('Justificatif'))
+      const modal = screen.getByText('Justificatif')
+      expect(modal).toBeDefined()
+
+      /* expect("la fonciton d'affichage de modale doit etre appellee")
+      await waitFor('le titre de la modale saffiche)
+      expect('le titre de la modale est justificatif') */
     })
   })
 })

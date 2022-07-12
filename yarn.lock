@@ -3038,7 +3038,7 @@
     "jest-util" "^26.6.2"
     "jsdom" "^16.4.0"
 
-"jest-environment-jsdom@28":
+"jest-environment-jsdom@^28":
   "integrity" "sha512-Ujhx/xFZGVPuxAVpseQ7KqdBErenuWH3Io2HujkGOKMS2VWmpnTGYHzv+73p21QJ9yYQlJkeg06rTe1svV+u0g=="
   "resolved" "https://registry.npmjs.org/jest-environment-jsdom/-/jest-environment-jsdom-28.1.2.tgz"
   "version" "28.1.2"
