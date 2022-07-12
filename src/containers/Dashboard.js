@@ -146,7 +146,7 @@ export default class {
         .html("")
       this.counter++
     }
-
+    //bug du dashboard
     filteredBills(bills, getStatus(this.index)).forEach(bill => {
       $(`#open-bill${bill.id}`).click((e) => this.handleEditTicket(e, bill, bills))
     })

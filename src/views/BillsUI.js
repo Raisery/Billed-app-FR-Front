@@ -28,7 +28,6 @@ const row = (bill) => {
 } */
 
 const rows = (data) => {
-  count = 0
   if (data && data.length) {
     data.sort((a, b) => {
       const dateA = Date.parse(a.date)

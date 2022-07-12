@@ -3,6 +3,7 @@
  */
 
 import {screen, waitFor} from "@testing-library/dom"
+import {toHaveClass} from "@testing-library/jest-dom"
 import userEvent from '@testing-library/user-event'
 import BillsUI from "../views/BillsUI.js"
 import Bills from "../containers/Bills.js"
@@ -39,13 +40,27 @@ describe("Given I am connected as an employee", () => {
     })
 
     test("Then click on eye icon should shows the modal", async () => {
+      $.fn.modal = jest.fn()
       document.body.innerHTML = BillsUI({data: bills})
-      await waitFor(() => screen.getByTestId('icon-eye1'))
-      const iconEye = screen.getByTestId('icon-eye1')
+      await waitFor(() => screen.getAllByTestId('icon-eye'))
+      Object.defineProperty(window, "localStorage", { value: { getItem: jest.fn(() => null), setItem: jest.fn(() => null) } },
+      )
+      const onNavigate = (pathname) => {
+        document.body.innerHTML = ROUTES({ data: [], pathname });
+        console.log(pathname)
+      };
+      const firebase = jest.fn()
+      
+      const bill = new Bills({ document, onNavigate, firebase, localStorage: window.localStorage })
+      const handleClickIconEye = jest.fn(bill.handleClickIconEye);
+      const iconEyes = screen.getAllByTestId('icon-eye')
+      const iconEye = iconEyes[0]
+      iconEye.addEventListener("click", handleClickIconEye(iconEye))
       userEvent.click(iconEye)
       await waitFor(() => screen.getByText('Justificatif'))
       const modal = screen.getByText('Justificatif')
       expect(modal).toBeDefined()
+      expect(handleClickIconEye).toHaveBeenCalled()
 
       /* expect("la fonciton d'affichage de modale doit etre appellee")
       await waitFor('le titre de la modale saffiche)
