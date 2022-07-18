@@ -2,16 +2,17 @@
  * @jest-environment jsdom
  */
 
-import {screen, waitFor} from "@testing-library/dom"
+import {screen, waitFor,} from "@testing-library/dom"
 import {toHaveClass} from "@testing-library/jest-dom"
 import userEvent from '@testing-library/user-event'
 import BillsUI from "../views/BillsUI.js"
 import Bills from "../containers/Bills.js"
 import { bills } from "../fixtures/bills.js"
-import { ROUTES_PATH} from "../constants/routes.js";
+import { ROUTES_PATH, ROUTES} from "../constants/routes.js";
 import {localStorageMock} from "../__mocks__/localStorage.js";
 
 import router from "../app/Router.js";
+import Store from "../app/Store.js"
 
 describe("Given I am connected as an employee", () => {
   describe("When I am on Bills Page", () => {
@@ -47,7 +48,6 @@ describe("Given I am connected as an employee", () => {
       )
       const onNavigate = (pathname) => {
         document.body.innerHTML = ROUTES({ data: [], pathname });
-        console.log(pathname)
       };
       const firebase = jest.fn()
       
@@ -61,10 +61,33 @@ describe("Given I am connected as an employee", () => {
       const modal = screen.getByText('Justificatif')
       expect(modal).toBeDefined()
       expect(handleClickIconEye).toHaveBeenCalled()
+    })
 
-      /* expect("la fonciton d'affichage de modale doit etre appellee")
-      await waitFor('le titre de la modale saffiche)
-      expect('le titre de la modale est justificatif') */
+    test("Then when i click on 'new bill' i should be redirected on newbill page", async () => {
+      document.body.innerHTML = BillsUI({ data: bills })
+      const onNavigate = (pathname) => {
+        document.body.innerHTML = ROUTES({ data: [], pathname });
+      };
+      Object.defineProperty(window, 'localStorage', { value: localStorageMock })
+      window.localStorage.setItem('user', JSON.stringify({
+        type: 'Employee'
+      }))
+      const root = document.createElement("div")
+      root.setAttribute("id", "root")
+      document.body.append(root)
+      router()
+      window.onNavigate(ROUTES_PATH.Bills)
+      const firebase = Store;
+      const bill = new Bills({ document, onNavigate, firebase, localStorage: window.localStorage })
+
+      await waitFor(() => screen.getByTestId('btn-new-bill'))
+      const newBillBtn = screen.getByTestId('btn-new-bill');
+      const handleClickNewBill = jest.fn(bill.handleClickNewBill);
+      newBillBtn.addEventListener('click', handleClickNewBill)
+      userEvent.click(newBillBtn);
+      await waitFor(() => screen.getByTestId('form-new-bill'))
+      expect(handleClickNewBill).toHaveBeenCalled()
+      expect(window.location.href).toBe('http://localhost/#employee/bill/new')
     })
   })
 })
