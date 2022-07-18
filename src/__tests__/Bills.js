@@ -12,7 +12,8 @@ import { ROUTES_PATH, ROUTES} from "../constants/routes.js";
 import {localStorageMock} from "../__mocks__/localStorage.js";
 
 import router from "../app/Router.js";
-import Store from "../app/Store.js"
+import store from "../__mocks__/store.js"
+import { formatDate, formatStatus } from "../app/format.js"
 
 describe("Given I am connected as an employee", () => {
   describe("When I am on Bills Page", () => {
@@ -77,7 +78,7 @@ describe("Given I am connected as an employee", () => {
       document.body.append(root)
       router()
       window.onNavigate(ROUTES_PATH.Bills)
-      const firebase = Store;
+      const firebase = store;
       const bill = new Bills({ document, onNavigate, firebase, localStorage: window.localStorage })
 
       await waitFor(() => screen.getByTestId('btn-new-bill'))
@@ -88,6 +89,24 @@ describe("Given I am connected as an employee", () => {
       await waitFor(() => screen.getByTestId('form-new-bill'))
       expect(handleClickNewBill).toHaveBeenCalled()
       expect(window.location.href).toBe('http://localhost/#employee/bill/new')
+    })
+
+    test("Then snapshot should be valid", async () => {
+      const onNavigate = (pathname) => {
+        document.body.innerHTML = ROUTES({ data: [], pathname });
+      };
+      Object.defineProperty(window, 'localStorage', { value: localStorageMock })
+      window.localStorage.setItem('user', JSON.stringify({
+        type: 'Employee'
+      }))
+      const bill = new Bills({ document, onNavigate, store, localStorage: window.localStorage })
+      const snapshot = await bill.getBills()
+      const mockedBills = await store.bills().list()
+      mockedBills.map(doc => {
+        doc.date = formatDate(doc.date)
+        doc.status = formatStatus(doc.status)
+      })
+      expect(snapshot).toEqual(mockedBills);
     })
   })
 })
