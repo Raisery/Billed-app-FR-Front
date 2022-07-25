@@ -76,7 +76,6 @@ describe("Given I am connected as an employee", () => {
       }
       const formData = new FormData()
       formData.append('file', 'yes')
-      //Object.defineProperty(window, 'localStorage', { value: localStorageMocked })
       window.localStorage.setItem('user', JSON.stringify({
         type: 'Employee'
       }))
