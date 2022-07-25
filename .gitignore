@@ -1,3 +1,4 @@
 node_modules
 coverage
 .idea
+src/fixtures/newbill.exemple.js

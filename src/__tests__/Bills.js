@@ -2,7 +2,7 @@
  * @jest-environment jsdom
  */
 
-import {screen, waitFor,} from "@testing-library/dom"
+import {screen, waitFor} from "@testing-library/dom"
 import {toHaveClass} from "@testing-library/jest-dom"
 import userEvent from '@testing-library/user-event'
 import BillsUI from "../views/BillsUI.js"
