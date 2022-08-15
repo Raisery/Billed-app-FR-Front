@@ -52,14 +52,14 @@ export default class {
                 }
               }
             })
-          const res = []
+          /* const res = []
           for (let i in bills) {
             if (bills[i].status) {
               res.push(bills[i])
             }
           
-        }
-          return res
+        } */
+          return bills
         })
     }
   }

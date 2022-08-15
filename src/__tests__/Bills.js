@@ -108,5 +108,29 @@ describe("Given I am connected as an employee", () => {
       })
       expect(snapshot).toEqual(mockedBills);
     })
+
+      describe("When I navigate to Bills", () => {
+      
+        test("then bills from an API and fails with 404 message error", async () => {
+          store.bills(() =>
+            Promise.reject(new Error("Erreur 404"))
+          );
+          const html = BillsUI({ error: "Erreur 404" });
+          document.body.innerHTML = html;
+          const message = await screen.getByText(/Erreur 404/);
+          expect(message).toBeTruthy();
+    
+        });
+        test("then messages from an API and fails with 500 message error", async () => {
+          store.bills(() =>
+            Promise.reject(new Error("Erreur 500"))
+          );
+          const html = BillsUI({ error: "Erreur 500" });
+          document.body.innerHTML = html;
+          const MyMessage = await screen.getByText(/Erreur 500/);
+          expect(MyMessage).toBeTruthy();
+    
+        });
+      });
   })
 })
