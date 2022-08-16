@@ -24,13 +24,17 @@ export default class NewBill {
     // end modif
     //add modif
     if (forma.includes("jpg") || forma.includes("jpeg") || forma.includes("png")) {
-      console.log('valid file')      
+      const error = this.document.querySelector(`#file-error`)
+      error.classList.remove("visible");
+      error.classList.add("hidden")      
     }
     else {
       const input = this.document.querySelector(`input[data-testid="file"]`)
-      console.log(input)
+      const error = this.document.querySelector(`#file-error`)
       input.files = null
       input.value = ''
+      error.classList.remove("hidden");
+      error.classList.add("visible")
     }
   }
   //end modif
