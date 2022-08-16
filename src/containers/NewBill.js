@@ -28,7 +28,8 @@ export default class NewBill {
     }
     else {
       const input = this.document.querySelector(`input[data-testid="file"]`)
-      input.files = []
+      console.log(input)
+      input.files = null
       input.value = ''
     }
   }
