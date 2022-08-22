@@ -36,11 +36,12 @@ describe("Given I am connected as an employee", () => {
     test("Then bills should be ordered from earliest to latest", () => {
       document.body.innerHTML = BillsUI({ data: bills })
       const dates = screen.getAllByText(/^(19|20)\d\d[- /.](0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])$/i).map(a => a.innerHTML)
-      const antiChrono = (a, b) => ((a < b) ? 1 : -1)
+      const antiChrono = (a, b) => ((a > b) ? 1 : -1)
       const datesSorted = [...dates].sort(antiChrono)
       expect(dates).toEqual(datesSorted)
     })
-
+    
+    //new tests
     test("Then click on eye icon should shows the modal", async () => {
       $.fn.modal = jest.fn()
       document.body.innerHTML = BillsUI({data: bills})
@@ -102,6 +103,7 @@ describe("Given I am connected as an employee", () => {
       const bill = new Bills({ document, onNavigate, store, localStorage: window.localStorage })
       const snapshot = await bill.getBills()
       const mockedBills = await store.bills().list()
+      mockedBills.sort((a, b) => ((a.date > b.date) ? 1 : -1))
       mockedBills.map(doc => {
         doc.date = formatDate(doc.date)
         doc.status = formatStatus(doc.status)

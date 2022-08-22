@@ -37,11 +37,12 @@ describe("Given I am connected as an employee", () => {
       const file = new File(['text'], 'text.txt', { type: 'text/plain' })
       userEvent.upload(input, file)
 
-      expect(input.files.length).toEqual(0)
+      expect(input.files).toBeNull()
 
     })
   })
 
+  //new tests
   describe("When the image format is accepted", () => {
     test('Then the change file fuction is called', () => {
       const html = NewBillUI()
@@ -94,7 +95,6 @@ describe("Given I am connected as an employee", () => {
           files: [new File(["test.png"], "test.png", { type: "image/png" })]
         }
       })
-      console.log(file.files)
       const handleSubmit = jest.fn(() => newBill.handleSubmit)
       const newBillform = screen.getByTestId("form-new-bill")
       newBillform.addEventListener('submit', handleSubmit)

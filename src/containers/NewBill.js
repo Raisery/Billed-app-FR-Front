@@ -22,7 +22,7 @@ export default class NewBill {
     var forma = file.name.split('.').pop().trim()
     forma = forma.toLowerCase()
     // end modif
-    //add modif
+    //add modif this function shouldnt create a new bill when she is called
     if (forma.includes("jpg") || forma.includes("jpeg") || forma.includes("png")) {
       const error = this.document.querySelector(`#file-error`)
       error.classList.remove("visible");
@@ -37,11 +37,10 @@ export default class NewBill {
       error.classList.add("visible")
     }
   }
-  //end modif
+  //end modif 
 
   handleSubmit = async e => {
     e.preventDefault()
-    console.log('e.target.querySelector(`input[data-testid="datepicker"]`).value', e.target.querySelector(`input[data-testid="datepicker"]`).value)
     const email = JSON.parse(localStorage.getItem("user")).email
     // add modif
     const file = this.document.querySelector(`input[data-testid="file"]`).files[0]
@@ -57,7 +56,6 @@ export default class NewBill {
           }
         })
         .then(({ fileUrl, key }) => {
-          console.log(fileUrl)
           this.billId = key
           this.fileUrl = fileUrl
           this.fileName = file.name
